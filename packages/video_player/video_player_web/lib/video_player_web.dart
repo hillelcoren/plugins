@@ -154,7 +154,7 @@ class _VideoPlayer {
     videoElement = VideoElement()
       ..src = uri.toString()
       ..autoplay = false
-      ..controls = false
+      ..controls = true
       ..style.border = 'none';
 
     // TODO(hterkelsen): Use initialization parameters once they are available
