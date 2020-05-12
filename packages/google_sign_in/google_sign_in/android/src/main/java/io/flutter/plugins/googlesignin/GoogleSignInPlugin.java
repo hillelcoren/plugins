@@ -334,7 +334,7 @@ public class GoogleSignInPlugin implements MethodCallHandler, FlutterPlugin, Act
                 .getResources()
                 .getIdentifier("default_web_client_id", "string", context.getPackageName());
         if (clientIdIdentifier != 0) {
-          optionsBuilder.requestIdToken(context.getString(clientIdIdentifier));
+          optionsBuilder.requestServerAuthCode(context.getString(clientIdIdentifier));
         }
         for (String scope : requestedScopes) {
           optionsBuilder.requestScopes(new Scope(scope));
