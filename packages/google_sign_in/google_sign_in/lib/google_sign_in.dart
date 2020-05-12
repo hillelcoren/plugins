@@ -134,7 +134,7 @@ class GoogleSignInAccount implements GoogleIdentity {
   }
 
   @override
-  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken);
+  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken, _serverAuthCode);
 
   @override
   String toString() {
