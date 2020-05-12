@@ -26,8 +26,14 @@ enum SignInOption {
 class GoogleSignInUserData {
   /// Uses the given data to construct an instance. Any of these parameters
   /// could be null.
-  GoogleSignInUserData(
-      {this.displayName, this.email, this.id, this.photoUrl, this.idToken});
+  GoogleSignInUserData({
+    this.displayName,
+    this.email,
+    this.id,
+    this.photoUrl,
+    this.idToken,
+    this.serverAuthCode,
+  });
 
   /// The display name of the signed in user.
   ///
@@ -62,9 +68,13 @@ class GoogleSignInUserData {
   /// data.
   String idToken;
 
+  /// A serverAuthCode that can be sent to your own server to verify
+  /// the authentication data.
+  String serverAuthCode;
+
   @override
-  int get hashCode =>
-      hashObjects(<String>[displayName, email, id, photoUrl, idToken]);
+  int get hashCode => hashObjects(
+      <String>[displayName, email, id, photoUrl, idToken, serverAuthCode]);
 
   @override
   bool operator ==(dynamic other) {
@@ -75,18 +85,15 @@ class GoogleSignInUserData {
         otherUserData.email == email &&
         otherUserData.id == id &&
         otherUserData.photoUrl == photoUrl &&
-        otherUserData.idToken == idToken;
+        otherUserData.idToken == idToken &&
+        otherUserData.serverAuthCode == serverAuthCode;
   }
 }
 
 /// Holds authentication data after sign in.
 class GoogleSignInTokenData {
   /// Either or both parameters may be null.
-  GoogleSignInTokenData({
-    this.idToken,
-    this.accessToken,
-    this.serverAuthCode,
-  });
+  GoogleSignInTokenData({this.idToken, this.accessToken, this.serverAuthCode});
 
   /// An OpenID Connect ID token for the authenticated user.
   String idToken;
