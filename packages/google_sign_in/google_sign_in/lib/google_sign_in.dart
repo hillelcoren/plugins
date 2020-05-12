@@ -27,6 +27,7 @@ class GoogleSignInAuthentication {
   /// The OAuth2 access token to access Google services.
   String get accessToken => _data.accessToken;
 
+  /// Server auth code used to access Google Login
   String get serverAuthCode => _data.serverAuthCode;
 
   @override
@@ -68,9 +69,6 @@ class GoogleSignInAccount implements GoogleIdentity {
   final String photoUrl;
 
   final String _idToken;
-
-  final String _serverAuthCode;
-
   final GoogleSignIn _googleSignIn;
 
   /// Retrieve [GoogleSignInAuthentication] for this account.
@@ -99,8 +97,6 @@ class GoogleSignInAccount implements GoogleIdentity {
     if (response.idToken == null) {
       response.idToken = _idToken;
     }
-
-    response.serverAuthCode ??= _serverAuthCode;
     return GoogleSignInAuthentication._(response);
   }
 
@@ -134,12 +130,11 @@ class GoogleSignInAccount implements GoogleIdentity {
         email == otherAccount.email &&
         id == otherAccount.id &&
         photoUrl == otherAccount.photoUrl &&
-        _idToken == otherAccount._idToken &&
-        _serverAuthCode == otherAccount._serverAuthCode;
+        _idToken == otherAccount._idToken;
   }
 
   @override
-  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken, _serverAuthCode);
+  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken);
 
   @override
   String toString() {
@@ -375,4 +370,10 @@ class GoogleSignIn {
   /// authentication.
   Future<GoogleSignInAccount> disconnect() =>
       _addMethodCall(GoogleSignInPlatform.instance.disconnect);
+
+  /// Requests the user grants additional Oauth [scopes].
+  Future<bool> requestScopes(List<String> scopes) async {
+    await _ensureInitialized();
+    return GoogleSignInPlatform.instance.requestScopes(scopes);
+  }
 }
