@@ -27,7 +27,6 @@ class GoogleSignInAuthentication {
   /// The OAuth2 access token to access Google services.
   String get accessToken => _data.accessToken;
 
-  /// Server auth code used to access Google Login
   String get serverAuthCode => _data.serverAuthCode;
 
   @override
@@ -44,7 +43,8 @@ class GoogleSignInAccount implements GoogleIdentity {
         email = data.email,
         id = data.id,
         photoUrl = data.photoUrl,
-        _idToken = data.idToken {
+        _idToken = data.idToken,
+        _serverAuthCode = data.serverAuthCode {
     assert(id != null);
   }
 
@@ -69,6 +69,9 @@ class GoogleSignInAccount implements GoogleIdentity {
   final String photoUrl;
 
   final String _idToken;
+
+  final String _serverAuthCode;
+
   final GoogleSignIn _googleSignIn;
 
   /// Retrieve [GoogleSignInAuthentication] for this account.
@@ -87,7 +90,7 @@ class GoogleSignInAccount implements GoogleIdentity {
     }
 
     final GoogleSignInTokenData response =
-        await GoogleSignInPlatform.instance.getTokens(
+    await GoogleSignInPlatform.instance.getTokens(
       email: email,
       shouldRecoverAuth: true,
     );
@@ -97,6 +100,8 @@ class GoogleSignInAccount implements GoogleIdentity {
     if (response.idToken == null) {
       response.idToken = _idToken;
     }
+
+    response.serverAuthCode ??= _serverAuthCode;
     return GoogleSignInAuthentication._(response);
   }
 
@@ -130,11 +135,12 @@ class GoogleSignInAccount implements GoogleIdentity {
         email == otherAccount.email &&
         id == otherAccount.id &&
         photoUrl == otherAccount.photoUrl &&
-        _idToken == otherAccount._idToken;
+        _idToken == otherAccount._idToken &&
+        _serverAuthCode == otherAccount._serverAuthCode;
   }
 
   @override
-  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken);
+  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken, _serverAuthCode);
 
   @override
   String toString() {
@@ -218,7 +224,7 @@ class GoogleSignIn {
   final String clientId;
 
   StreamController<GoogleSignInAccount> _currentUserController =
-      StreamController<GoogleSignInAccount>.broadcast();
+  StreamController<GoogleSignInAccount>.broadcast();
 
   /// Subscribe to this stream to be notified when the current user changes.
   Stream<GoogleSignInAccount> get onCurrentUserChanged =>
@@ -252,9 +258,9 @@ class GoogleSignIn {
       hostedDomain: hostedDomain,
       clientId: clientId,
     )..catchError((dynamic _) {
-        // Invalidate initialization if it errors out.
-        _initialization = null;
-      });
+      // Invalidate initialization if it errors out.
+      _initialization = null;
+    });
   }
 
   /// The most recently scheduled method call.
@@ -280,9 +286,9 @@ class GoogleSignIn {
   /// method call may be skipped, if there's already [_currentUser] information.
   /// This is used from the [signIn] and [signInSilently] methods.
   Future<GoogleSignInAccount> _addMethodCall(
-    Function method, {
-    bool canSkipCall = false,
-  }) async {
+      Function method, {
+        bool canSkipCall = false,
+      }) async {
     Future<GoogleSignInAccount> response;
     if (_lastMethodCall == null) {
       response = _callMethod(method);
@@ -356,7 +362,7 @@ class GoogleSignIn {
   /// Re-authentication can be triggered only after [signOut] or [disconnect].
   Future<GoogleSignInAccount> signIn() {
     final Future<GoogleSignInAccount> result =
-        _addMethodCall(GoogleSignInPlatform.instance.signIn, canSkipCall: true);
+    _addMethodCall(GoogleSignInPlatform.instance.signIn, canSkipCall: true);
     bool isCanceled(dynamic error) =>
         error is PlatformException && error.code == kSignInCanceledError;
     return result.catchError((dynamic _) => null, test: isCanceled);
@@ -370,10 +376,4 @@ class GoogleSignIn {
   /// authentication.
   Future<GoogleSignInAccount> disconnect() =>
       _addMethodCall(GoogleSignInPlatform.instance.disconnect);
-
-  /// Requests the user grants additional Oauth [scopes].
-  Future<bool> requestScopes(List<String> scopes) async {
-    await _ensureInitialized();
-    return GoogleSignInPlatform.instance.requestScopes(scopes);
-  }
 }
