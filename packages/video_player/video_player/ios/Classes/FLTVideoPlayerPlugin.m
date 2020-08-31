@@ -451,7 +451,10 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     [player disposeSansEventChannel];
   }
   [_players removeAllObjects];
-  FLTVideoPlayerApiSetup(registrar.messenger, nil);
+  // TODO(57151): This should be commented out when 57151's fix lands on stable.
+  // This is the correct behavior we never did it in the past and the engine
+  // doesn't currently support it.
+  // FLTVideoPlayerApiSetup(registrar.messenger, nil);
 }
 
 - (FLTTextureMessage*)onPlayerSetup:(FLTVideoPlayer*)player
@@ -555,6 +558,17 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 - (void)pause:(FLTTextureMessage*)input error:(FlutterError**)error {
   FLTVideoPlayer* player = _players[input.textureId];
   [player pause];
+}
+
+- (void)setMixWithOthers:(FLTMixWithOthersMessage*)input
+                   error:(FlutterError* _Nullable __autoreleasing*)error {
+  if ([input.mixWithOthers boolValue]) {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback
+                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                                           error:nil];
+  } else {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+  }
 }
 
 @end

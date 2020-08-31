@@ -489,6 +489,8 @@ public class GoogleSignInPlugin implements MethodCallHandler, FlutterPlugin, Act
       response.put("displayName", account.getServerAuthCode());
       response.put("serverAuthCode", account.getServerAuthCode());
 
+      //response.put("serverAuthCode", account.getServerAuthCode());
+      //response.put("displayName", account.getDisplayName());
       if (account.getPhotoUrl() != null) {
         response.put("photoUrl", account.getPhotoUrl().toString());
       }
