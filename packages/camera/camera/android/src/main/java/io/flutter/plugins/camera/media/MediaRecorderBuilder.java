@@ -56,9 +56,12 @@ public class MediaRecorderBuilder {
     mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
     mediaRecorder.setOutputFormat(recordingProfile.fileFormat);
     if (enableAudio) {
-      mediaRecorder.setAudioEncoder(recordingProfile.audioCodec);
-      mediaRecorder.setAudioEncodingBitRate(recordingProfile.audioBitRate);
-      mediaRecorder.setAudioSamplingRate(recordingProfile.audioSampleRate);
+      mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+      mediaRecorder.setAudioEncodingBitRate(96000);
+      mediaRecorder.setAudioSamplingRate(44100);
+      //mediaRecorder.setAudioEncoder(recordingProfile.audioCodec);
+      //mediaRecorder.setAudioEncodingBitRate(recordingProfile.audioBitRate);
+      //mediaRecorder.setAudioSamplingRate(recordingProfile.audioSampleRate);
     }
     mediaRecorder.setVideoEncoder(recordingProfile.videoCodec);
     mediaRecorder.setVideoEncodingBitRate(recordingProfile.videoBitRate);
