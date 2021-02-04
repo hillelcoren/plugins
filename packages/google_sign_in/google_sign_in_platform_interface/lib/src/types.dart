@@ -38,7 +38,7 @@ class GoogleSignInUserData {
   /// The display name of the signed in user.
   ///
   /// Not guaranteed to be present for all users, even when configured.
-  String displayName;
+  String? displayName;
 
   /// The email address of the signed in user.
   ///
@@ -62,11 +62,11 @@ class GoogleSignInUserData {
   /// The photo url of the signed in user if the user has a profile picture.
   ///
   /// Not guaranteed to be present for all users, even when configured.
-  String photoUrl;
+  String? photoUrl;
 
   /// A token that can be sent to your own server to verify the authentication
   /// data.
-  String idToken;
+  String? idToken;
 
   /// A serverAuthCode that can be sent to your own server to verify
   /// the authentication data.
@@ -96,13 +96,13 @@ class GoogleSignInTokenData {
   GoogleSignInTokenData({this.idToken, this.accessToken, this.serverAuthCode});
 
   /// An OpenID Connect ID token for the authenticated user.
-  String idToken;
+  String? idToken;
 
   /// The OAuth2 access token used to access Google services.
-  String accessToken;
+  String? accessToken;
 
   /// Server auth code used to access Google Login
-  String serverAuthCode;
+  String? serverAuthCode;
 
   @override
   int get hashCode => hash3(idToken, accessToken, serverAuthCode);
