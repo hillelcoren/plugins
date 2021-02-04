@@ -52,7 +52,7 @@ public class MediaRecorderBuilder {
 
     // There's a fixed order that mediaRecorder expects. Only change these functions accordingly.
     // You can find the specifics here: https://developer.android.com/reference/android/media/MediaRecorder.
-    if (enableAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    if (enableAudio) mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
     mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
     mediaRecorder.setOutputFormat(recordingProfile.fileFormat);
     if (enableAudio) {
