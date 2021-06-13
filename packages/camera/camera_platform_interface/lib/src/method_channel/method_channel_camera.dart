@@ -1,4 +1,4 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -59,7 +59,7 @@ class MethodChannelCamera extends CameraPlatform {
   @override
   Future<List<CameraDescription>> availableCameras() async {
     try {
-      final cameras = await _channel
+      final List<Map<dynamic, dynamic>>? cameras = await _channel
           .invokeListMethod<Map<dynamic, dynamic>>('availableCameras');
 
       if (cameras == null) {
@@ -82,7 +82,7 @@ class MethodChannelCamera extends CameraPlatform {
   Future<int> createCamera(
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
-    bool enableAudio = true,
+    bool enableAudio = false,
   }) async {
     try {
       final reply = await _channel

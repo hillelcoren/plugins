@@ -1,4 +1,4 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -11,6 +11,8 @@ export 'circle_updates.dart';
 export 'circle.dart';
 export 'joint_type.dart';
 export 'location.dart';
+export 'maps_object_updates.dart';
+export 'maps_object.dart';
 export 'marker_updates.dart';
 export 'marker.dart';
 export 'pattern_item.dart';

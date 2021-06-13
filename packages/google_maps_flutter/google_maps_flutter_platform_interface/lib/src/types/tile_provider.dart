@@ -1,4 +1,4 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -12,5 +12,5 @@ abstract class TileProvider {
   /// Returns the tile to be used for this tile coordinate.
   ///
   /// See [TileOverlay] for the specification of tile coordinates.
-  Future<Tile> getTile(int x, int y, int zoom);
+  Future<Tile> getTile(int x, int y, int? zoom);
 }

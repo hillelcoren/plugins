@@ -1,4 +1,4 @@
-// Copyright 2019 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -7,7 +7,6 @@ package io.flutter.plugins.imagepicker;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
@@ -216,11 +215,11 @@ public class ImagePickerPlugin
     application = null;
   }
 
-  private final ImagePickerDelegate constructDelegate(final Activity setupActivity) {
+  @VisibleForTesting
+  final ImagePickerDelegate constructDelegate(final Activity setupActivity) {
     final ImagePickerCache cache = new ImagePickerCache(setupActivity);
 
-    final File externalFilesDirectory =
-        setupActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    final File externalFilesDirectory = setupActivity.getCacheDir();
     final ExifDataCopier exifDataCopier = new ExifDataCopier();
     final ImageResizer imageResizer = new ImageResizer(externalFilesDirectory, exifDataCopier);
     return new ImagePickerDelegate(setupActivity, externalFilesDirectory, imageResizer, cache);

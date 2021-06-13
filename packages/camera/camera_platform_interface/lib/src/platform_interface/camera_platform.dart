@@ -1,4 +1,4 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -44,6 +44,8 @@ abstract class CameraPlatform extends PlatformInterface {
   }
 
   /// Completes with a list of available cameras.
+  ///
+  /// This method returns an empty list when no cameras are available.
   Future<List<CameraDescription>> availableCameras() {
     throw UnimplementedError('availableCameras() is not implemented.');
   }
@@ -52,7 +54,7 @@ abstract class CameraPlatform extends PlatformInterface {
   Future<int> createCamera(
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
-    bool enableAudio = true,
+    bool enableAudio = false,
   }) {
     throw UnimplementedError('createCamera() is not implemented.');
   }

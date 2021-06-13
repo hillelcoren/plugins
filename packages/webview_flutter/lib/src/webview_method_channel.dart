@@ -1,4 +1,4 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -39,6 +39,9 @@ class MethodChannelWebViewPlatform implements WebViewPlatformController {
         );
       case 'onPageFinished':
         _platformCallbacksHandler.onPageFinished(call.arguments['url']!);
+        return null;
+      case 'onProgress':
+        _platformCallbacksHandler.onProgress(call.arguments['progress']);
         return null;
       case 'onPageStarted':
         _platformCallbacksHandler.onPageStarted(call.arguments['url']!);
@@ -183,6 +186,7 @@ class MethodChannelWebViewPlatform implements WebViewPlatformController {
 
     _addIfNonNull('jsMode', settings!.javascriptMode?.index);
     _addIfNonNull('hasNavigationDelegate', settings.hasNavigationDelegate);
+    _addIfNonNull('hasProgressTracking', settings.hasProgressTracking);
     _addIfNonNull('debuggingEnabled', settings.debuggingEnabled);
     _addIfNonNull(
         'gestureNavigationEnabled', settings.gestureNavigationEnabled);
@@ -197,13 +201,16 @@ class MethodChannelWebViewPlatform implements WebViewPlatformController {
   /// This is used for the `creationParams` argument of the platform views created by
   /// [AndroidWebViewBuilder] and [CupertinoWebViewBuilder].
   static Map<String, dynamic> creationParamsToMap(
-      CreationParams creationParams) {
+    CreationParams creationParams, {
+    bool usesHybridComposition = false,
+  }) {
     return <String, dynamic>{
       'initialUrl': creationParams.initialUrl,
       'settings': _webSettingsToMap(creationParams.webSettings),
       'javascriptChannelNames': creationParams.javascriptChannelNames.toList(),
       'userAgent': creationParams.userAgent,
       'autoMediaPlaybackPolicy': creationParams.autoMediaPlaybackPolicy.index,
+      'usesHybridComposition': usesHybridComposition,
     };
   }
 }

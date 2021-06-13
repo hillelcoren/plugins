@@ -1,8 +1,16 @@
-## 2.0.0-nullsafety.1
+## 2.0.3
 
-* Bump Dart SDK to support null safety.
+* Migrate `pushRouteNameToFramework` to use ChannelBuffers API.
 
-## 2.0.0-nullsafety
+## 2.0.2
+
+* Update platform_plugin_interface version requirement.
+
+## 2.0.1
+
+* Fix SDK range.
+
+## 2.0.0
 
 * Migrate to null safety.
 

@@ -1,12 +1,13 @@
-## 0.1.0-nullsafety.2
+## 2.0.2
 
-* Bump ffi dependency to 0.3.0-nullsafety.1
+* Add `implements` to pubspec.yaml.
+* Add `registerWith()` to the Dart main class.
 
-## 0.1.0-nullsafety.1
+## 2.0.1
 
-* Bump win32 dependency to latest version.
+* Fix a crash when a known folder can't be located.
 
-## 0.1.0-nullsafety
+## 2.0.0
 
 * Migrate to null safety
 

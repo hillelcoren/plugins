@@ -1,35 +1,19 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 import 'dart:ui' show hashValues;
+
 import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart' show immutable;
 
 import 'types.dart';
-import 'package:meta/meta.dart' show immutable, required;
 
 /// Uniquely identifies a [TileOverlay] among [GoogleMap] tile overlays.
 @immutable
-class TileOverlayId {
+class TileOverlayId extends MapsObjectId<TileOverlay> {
   /// Creates an immutable identifier for a [TileOverlay].
-  TileOverlayId(this.value) : assert(value != null);
-
-  /// The value of the [TileOverlayId].
-  final String value;
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) {
-      return false;
-    }
-    return other is TileOverlayId && other.value == value;
-  }
-
-  @override
-  int get hashCode => value.hashCode;
-
-  @override
-  String toString() => '${objectRuntimeType(this, 'TileOverlayId')}($value)';
+  const TileOverlayId(String value) : super(value);
 }
 
 /// A set of images which are displayed on top of the base map tiles.
@@ -61,14 +45,14 @@ class TileOverlayId {
 /// At zoom level N, the x values of the tile coordinates range from 0 to 2N - 1 and increase from
 /// west to east and the y values range from 0 to 2N - 1 and increase from north to south.
 ///
-class TileOverlay {
+class TileOverlay implements MapsObject {
   /// Creates an immutable representation of a [TileOverlay] to draw on [GoogleMap].
   const TileOverlay({
-    @required this.tileOverlayId,
+    required this.tileOverlayId,
     this.fadeIn = true,
     this.tileProvider,
     this.transparency = 0.0,
-    this.zIndex,
+    this.zIndex = 0,
     this.visible = true,
     this.tileSize = 256,
   }) : assert(transparency >= 0.0 && transparency <= 1.0);
@@ -76,11 +60,14 @@ class TileOverlay {
   /// Uniquely identifies a [TileOverlay].
   final TileOverlayId tileOverlayId;
 
+  @override
+  TileOverlayId get mapsId => tileOverlayId;
+
   /// Whether the tiles should fade in. The default is true.
   final bool fadeIn;
 
   /// The tile provider to use for this tile overlay.
-  final TileProvider tileProvider;
+  final TileProvider? tileProvider;
 
   /// The transparency of the tile overlay. The default transparency is 0 (opaque).
   final double transparency;
@@ -104,16 +91,17 @@ class TileOverlay {
   /// Creates a new [TileOverlay] object whose values are the same as this instance,
   /// unless overwritten by the specified parameters.
   TileOverlay copyWith({
-    TileOverlayId tileOverlayId,
-    bool fadeInParam,
-    double transparencyParam,
-    int zIndexParam,
-    bool visibleParam,
-    int tileSizeParam,
+    bool? fadeInParam,
+    TileProvider? tileProviderParam,
+    double? transparencyParam,
+    int? zIndexParam,
+    bool? visibleParam,
+    int? tileSizeParam,
   }) {
     return TileOverlay(
       tileOverlayId: tileOverlayId,
       fadeIn: fadeInParam ?? fadeIn,
+      tileProvider: tileProviderParam ?? tileProvider,
       transparency: transparencyParam ?? transparency,
       zIndex: zIndexParam ?? zIndex,
       visible: visibleParam ?? visible,
@@ -121,11 +109,13 @@ class TileOverlay {
     );
   }
 
-  /// Converts this object to JSON.
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{};
+  TileOverlay clone() => copyWith();
 
-    void addIfPresent(String fieldName, dynamic value) {
+  /// Converts this object to JSON.
+  Object toJson() {
+    final Map<String, Object> json = <String, Object>{};
+
+    void addIfPresent(String fieldName, Object? value) {
       if (value != null) {
         json[fieldName] = value;
       }
@@ -149,6 +139,7 @@ class TileOverlay {
     return other is TileOverlay &&
         tileOverlayId == other.tileOverlayId &&
         fadeIn == other.fadeIn &&
+        tileProvider == other.tileProvider &&
         transparency == other.transparency &&
         zIndex == other.zIndex &&
         visible == other.visible &&
@@ -156,6 +147,6 @@ class TileOverlay {
   }
 
   @override
-  int get hashCode => hashValues(
-      tileOverlayId, fadeIn, transparency, zIndex, visible, tileSize);
+  int get hashCode => hashValues(tileOverlayId, fadeIn, tileProvider,
+      transparency, zIndex, visible, tileSize);
 }
